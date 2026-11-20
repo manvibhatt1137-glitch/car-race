@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event-Driven Arcade Racer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Main Game Area -->
+    <main class="game-container">
+      <header class="top-bar">
+        <h1>TURBO EVENT RACER</h1>
+        <div id="hud-bar" class="hud-bar hidden">
+          <span id="hud-lap">Lap: 1 / 3</span>
+          <span id="hud-pos">Pos: 1 / 6</span>
+          <span id="hud-time">Time: 00.0s</span>
+          <span id="hud-stunts">Stunt Pts: 0</span>
+        </div>
+      </header>
+
+      <div class="canvas-wrapper">
+        <canvas id="gameCanvas" width="900" height="600"></canvas>
+
+        <!-- LOBBY OVERLAY -->
+        <section id="lobbyOverlay" class="overlay">
+          <div class="card">
+            <h2>Race Lobby (Max 6 Racers)</h2>
+
+            <div class="form-grid">
+              <label>
+                Nickname
+                <input id="playerName" type="text" value="Player 1" maxlength="14" />
+              </label>
+
+              <label>
+                Car Color
+                <select id="playerColor">
+                  <option value="#ff3b30">Crimson Red</option>
+                  <option value="#00e5ff">Electric Cyan</option>
+                  <option value="#ffcc00">Solar Yellow</option>
+                  <option value="#34c759">Neon Green</option>
+                  <option value="#af52de">Hyper Purple</option>
+                  <option value="#ff9500">Blaze Orange</option>
+                </select>
+              </label>
+
+              <label>
+                Number of Laps
+                <select id="lapSelect">
+                  <option value="1">1 Lap (Sprint)</option>
+                  <option value="3" selected>3 Laps (Standard)</option>
+                  <option value="5">5 Laps (Endurance)</option>
+                  <option value="7">7 Laps (Grand Prix)</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="lobby-roster">
+              <h3>Current Grid (<span id="racerCount">1</span>/6)</h3>
+              <ul id="rosterList"></ul>
+            </div>
+
+            <div class="button-row">
+              <button id="addBotBtn" class="btn secondary">+ Add Bot</button>
+              <button id="fillBotsBtn" class="btn secondary">Fill with Bots (6)</button>
+              <button id="connectSerialBtn" class="btn outline">Connect ESP32 (Serial)</button>
+            </div>
+            <p id="serialStatus" class="status-text">Input: Keyboard Active (WASD / Arrows + Space)</p>
+
+            <button id="startRaceBtn" class="btn primary full-width">START RACE</button>
+          </div>
+        </section>
+
+        <!-- PODIUM / RESULTS OVERLAY -->
+        <section id="resultsOverlay" class="overlay hidden">
+          <div class="card">
+            <h2>Race Finished!</h2>
+            <table class="results-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Racer</th>
+                  <th>Total Time</th>
+                  <th>Stunt Score</th>
+                  <th>Praises</th>
+                </tr>
+              </thead>
+              <tbody id="resultsBody"></tbody>
+            </table>
+            <div class="button-row">
+              <button id="raceAgainBtn" class="btn primary">Back to Lobby</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Live Event Queue Inspector Sidebar -->
+    <aside class="inspector-panel">
+      <h2>Local Event Queue</h2>
+      <p class="inspector-sub">Live FIFO stream (Producers &rarr; Queue &rarr; Handlers)</p>
+      <div class="inspector-stats">
+        <span>Processed: <strong id="eventsProcessedCount">0</strong></span>
+        <button id="clearLogBtn" class="btn small">Clear</button>
+      </div>
+      <ul id="eventLogList" class="event-log"></ul>
+    </aside>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
